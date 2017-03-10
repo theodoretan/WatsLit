@@ -1,0 +1,24 @@
+{
+  "name": "bots-mva",
+  "version": "1.0.0",
+  "description": "Samples for the Bots MVA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeekTrainer/bots-mva.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GeekTrainer/bots-mva/issues"
+  },
+  "homepage": "https://github.com/GeekTrainer/bots-mva#readme",
+  "dependencies": {
+    "botbuilder": "^3.2.3",
+    "express": "^4.15.2",
+    "restify": "^4.3.0"
+  }
+}
