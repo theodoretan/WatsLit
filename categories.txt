@@ -1,0 +1,3 @@
+Types(Events): ['Information session', 'Workshop', 'Lecture', 'Conference', 'Seminar', 'Open house', 'Reception', 'Performance', 'Thesis defence', 'Reunion', 'Meeting']
+Categories(FEDS): ['Events', 'Cultural Clubs', 'Athletics', 'Sports & Recreational', 'Pub Events', 'Environmental & Sustainability Clubs & Initiatives']
+
