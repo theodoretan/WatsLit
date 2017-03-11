@@ -1,6 +1,8 @@
 var builder = require('botbuilder');
 var restify = require('restify');
 var search = require('./search.js');
+var specialChars = require('underscore');
+
 
 var connector = new builder.ChatConnector();
 var bot = new builder.UniversalBot(connector);
@@ -29,7 +31,7 @@ dialog.matches('Greeting', [
                 console.log(response[i]);
                 cards.push(
                     new builder.HeroCard(session)
-            .title(response[i].title)
+            .title(specialChars.unescape(response[i].title))
             .subtitle("This program starts at: " + response[i].times[0].start)
             .text('This event is run by: ' + response[i].site_name)
             .images([
