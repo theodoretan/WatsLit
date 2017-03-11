@@ -22,7 +22,7 @@ dialog.matches('Greeting', [
         session.send("Hey! I'm the WatsLit Bot! I know everything about what's lit at UWaterloo! To start off, here are some trending events: ");
         
         var query = result.response;
-        search.searchEvents(null,null, null, function (response) {
+        search.searchEvents(null,null, "Workshop", function (response) {
             session.dialogData.property = null;
             
             // display the cards
@@ -30,17 +30,16 @@ dialog.matches('Greeting', [
             for(var i=0; i<10; ++i){
                 console.log(response[i]);
                 cards.push(
-                    new builder.HeroCard(session)
-            .title(specialChars.unescape(response[i].title))
-            .subtitle("This program starts at: " + response[i].times[0].start)
-            .text('This event is run by: ' + response[i].site_name)
-            .images([
-                builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, response[i].link , 'Learn More')
-            ])
-
+                            new builder.HeroCard(session)
+                    .title(specialChars.unescape(response[i].title))
+                    .subtitle("This program starts at: " + response[i].times[0].start)
+                    .text('This event is run by: ' + response[i].site_name)
+                    .images([
+                        builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
+                    ])
+                    .buttons([
+                        builder.CardAction.openUrl(session, response[i].link , 'Learn More')
+                    ])
 
                 );
             }
@@ -51,39 +50,25 @@ dialog.matches('Greeting', [
                 .attachments(cards);
 
             session.send(reply);
-           
             builder.Prompts.text(session, "Try a type of event (e.g. workshops, gala)");
+            session.endDialog();
         })
     }
 ]);
 
 dialog.matches('Event Search',[
        // Create the carousel
-    function (session, result, next) {
-        var query = result.response;
-         builder.Message(session, "Here's what I found.");
+       
+    function (session,args, next) {
         
-        var query = builder.EntityRecognizer.findBestMatch();
         var time = builder.EntityRecognizer.findEntity(args.intent.entities, 'builtin.datetime.date');
-        var time = builder.EntityRecognizer.resolveTime(time.entity);
-        if (cityEntity) {
-            // city entity detected, continue to next step
-            session.dialogData.searchType = 'city';
-            next({ response: cityEntity.entity });
-        } else if (airportEntity) {
-            // airport entity detected, continue to next step
-            session.dialogData.searchType = 'airport';
-            next({ response: airportEntity.entity });
-        } else {
-            // no entities detected, ask user for a destination
-            builder.Prompts.text(session, 'Please enter your destination');
-        }
-
+        var query = builder.EntityRecognizer.findEntity(args.intent.entities, 'Performance');
+        builder.Prompts.text(session, "Here's what I found.");
         search.searchEvents(time, "2017-03-26T09:45:00-04:00", query, function (response) {
             session.dialogData.property = null;
             
              var cards = []; //getCardsAttachments();
-            for(var i=0; i<response.length; ++i){
+            for(var i=0; i<10; ++i){
                 console.log(response[i]);
                 cards.push(
                     new builder.HeroCard(session)
@@ -107,6 +92,7 @@ dialog.matches('Event Search',[
                 .attachments(cards);
 
             session.send(reply);
+            session.endDialog();
 
         })
     }
