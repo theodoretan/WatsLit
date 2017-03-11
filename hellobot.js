@@ -32,9 +32,9 @@ dialog.matches('Greeting', [
             for(var i=0; i<10; ++i){
                 console.log(response[i]);
                 cards.push(
-<<<<<<< HEAD
+
                             new builder.HeroCard(session)
-                    .title(specialChars.unescape(response[i].title))
+                    .title(specialChars.unescape(response[i].title).replace("&#039;","'"))
                     .subtitle("This program starts at: " + response[i].times[0].start)
                     .text('This event is run by: ' + response[i].site_name)
                     .images([
@@ -43,21 +43,6 @@ dialog.matches('Greeting', [
                     .buttons([
                         builder.CardAction.openUrl(session, response[i].link , 'Learn More')
                     ])
-=======
-                    new builder.HeroCard(session)
-            .title(specialChars.unescape(response[i].title).replace("&#039;", "'"))
-            .subtitle("This program starts at: " + response[i].times[0].start)
-            .text('This event is run by: ' + response[i].site_name)
-            .images([
-                builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, response[i].link , 'Learn More')
-            ])
-
->>>>>>> 6c3ecdc87064910f80eda7e34b686c7af38c6920
-
-
                 );
             }
 
@@ -77,20 +62,24 @@ dialog.matches('Event Search',[
        // Create the carousel
        
     function (session,args, next) {
-        
-        var time = builder.EntityRecognizer.findEntity(args.intent.entities, 'builtin.datetime.date');
-        var query = builder.EntityRecognizer.findEntity(args.intent.entities, 'Performance');
-        builder.Prompts.text(session, "Here's what I found.");
+        console.log(args.entities[1].resolution.date);
+        var time = new Date(args.entities[1].resolution.date);
+        time = time.toISOString();
+        console.log(time);
+        var query = args.entities[0].type;
+      
+        builder.Prompts.text(session, "Here's what I found:");
         search.searchEvents(time, "2017-03-26T09:45:00-04:00", query, function (response) {
             session.dialogData.property = null;
-            
+ 
              var cards = []; //getCardsAttachments();
             for(var i=0; i<10; ++i){
+              var datetime = Date.parse(response[i].times[0].start);
                 console.log(response[i]);
                 cards.push(
                     new builder.HeroCard(session)
             .title(specialChars.unescape(response[i].title).replace("&#039;", "'"))
-            .subtitle("This program starts at: " + response[i].times[0].start)
+            .subtitle("This program starts at: " + datetime)
             .text('This event is run by: ' + response[i].site_name)
             .images([
                 builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
