@@ -9,6 +9,7 @@ var builder = require("botbuilder");
 var botbuilder_azure = require("botbuilder-azure");
 var restify = require('restify');
 var search = require('./search.js');
+var help = require('./help.js');
 var specialChars = require('underscore');
 
 var useEmulator = (process.env.NODE_ENV == 'development');
@@ -138,7 +139,10 @@ dialog.matches('Event Search',[
 dialog.matches('Help',[
        // Create the carousel
     function (session, result, next) {
-         builder.Prompts.choice("Here's a full list of options.",types)
+        var helpReply;
+        help.help(function(helpReply){
+            session.send(helpReply);
+        });
     }
 ]);
 
