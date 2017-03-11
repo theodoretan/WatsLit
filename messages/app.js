@@ -66,11 +66,40 @@ function getCollection() {
     });
 }
 
+
+// ADD THIS PART TO YOUR CODE
+function getFamilyDocument(document) {
+    let documentUrl = `${collectionUrl}/docs/${document.id}`;
+    console.log(`Getting document:\n${document.id}\n`);
+
+    return new Promise((resolve, reject) => {
+        client.readDocument(documentUrl, { partitionKey: document.district }, (err, result) => {
+            if (err) {
+                if (err.code == HttpStatusCodes.NOTFOUND) {
+                    client.createDocument(collectionUrl, document, (err, created) => {
+                        if (err) reject(err)
+                        else resolve(created);
+                    });
+                } else {
+                    reject(err);
+                }
+            } else {
+                resolve(result);
+            }
+        });
+    });
+};
+
 getDatabase()
 
 // ADD THIS PART TO YOUR CODE
 .then(() => getCollection())
 // ENDS HERE
+
+.then(() => getFamilyDocument(config.documents.Andersen))
+.then(() => getFamilyDocument(config.documents.Wakefield))
+// ENDS HERE
+
 
 .then(() => { exit(`Completed successfully`); })
 .catch((error) => { exit(`Completed with error ${JSON.stringify(error)}`) });
