@@ -17,10 +17,9 @@ bot.dialog('/', [
         }
     } , function (session, result, next) {
         var query = result.response;
-        search.testSearch(query, function (holidays) {
+        search.searchEventsByDate(query, function (response) {
             session.dialogData.property = null;
-            var response = holidays;
-            builder.Prompts.text(session, response);
+            builder.Prompts.text(session, response);  
         })
     }
 ]);
