@@ -7,67 +7,37 @@ config.primaryKey = "1TvDXekns4CAuRd9d2Gs9JAmV9JICKposyityz9xo7NdT01OD0b39ni8Dv0
 
 
 config.database = {
-    "id": "FamilyDB"
+    "id": "EventDB"
 };
 
 config.collection = {
-    "id": "FamilyColl"
+    "id": "EventCol"
 };
 
 config.documents = {
-    "Andersen": {
-        "id": "Anderson.1",
-        "lastName": "Andersen",
-        "parents": [{
-            "firstName": "Thomas"
-        }, {
-                "firstName": "Mary Kay"
-            }],
-        "children": [{
-            "firstName": "Henriette Thaulow",
-            "gender": "female",
-            "grade": 5,
-            "pets": [{
-                "givenName": "Fluffy"
-            }]
-        }],
-        "address": {
-            "state": "WA",
-            "county": "King",
-            "city": "Seattle"
-        }
+    "f301568": {
+      "id":"f301568",
+      "title":"Sex Toy Bingo - Test",
+      "location":"200 University Ave, Waterloo, N2L3G1, Canada",
+      "start":"2016-01-11T19:00:00-05:00",
+      "end":"2016-01-11T23:55:00-05:00",
+      "categories":[
+        "Events"
+      ],
+      "updated":"2016-01-08T17:20:11-05:00",
+      "url":"http:\/\/www.feds.ca\/event\/sex-toy-bingo-5\/"
     },
-    "Wakefield": {
-        "id": "Wakefield.7",
-        "parents": [{
-            "familyName": "Wakefield",
-            "firstName": "Robin"
-        }, {
-                "familyName": "Miller",
-                "firstName": "Ben"
-            }],
-        "children": [{
-            "familyName": "Merriam",
-            "firstName": "Jesse",
-            "gender": "female",
-            "grade": 8,
-            "pets": [{
-                "givenName": "Goofy"
-            }, {
-                    "givenName": "Shadow"
-                }]
-        }, {
-                "familyName": "Miller",
-                "firstName": "Lisa",
-                "gender": "female",
-                "grade": 1
-            }],
-        "address": {
-            "state": "NY",
-            "county": "Manhattan",
-            "city": "NY"
-        },
-        "isRegistered": false
+    "f300607": {
+      "id":"f300607",
+      "title":"Volunteer Fair - Test",
+      "location":null,
+      "start":"2016-01-12T11:00:00-05:00",
+      "end":"2016-01-12T14:00:00-05:00",
+      "categories":[
+        "Events"
+      ],
+      "updated":"2016-01-04T17:10:44-05:00",
+      "url":"http:\/\/www.feds.ca\/event\/volunteer-fair-2\/"
     }
 };
 

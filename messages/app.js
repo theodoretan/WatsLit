@@ -67,8 +67,7 @@ function getCollection() {
 }
 
 
-// ADD THIS PART TO YOUR CODE
-function getFamilyDocument(document) {
+function getEventDocument(document) {
     let documentUrl = `${collectionUrl}/docs/${document.id}`;
     console.log(`Getting document:\n${document.id}\n`);
 
@@ -92,13 +91,15 @@ function getFamilyDocument(document) {
 
 
 
-function queryCollection() {
+function queryCollection(query) {
     console.log(`Querying collection through index:\n${config.collection.id}`);
+
+    let q = query;
 
     return new Promise((resolve, reject) => {
         client.queryDocuments(
             collectionUrl,
-            'SELECT VALUE r.children FROM root r WHERE r.lastName = "Andersen"'
+            q
         ).toArray((err, results) => {
             if (err) reject(err)
             else {
@@ -159,12 +160,12 @@ getDatabase()
 .then(() => getCollection())
 // ENDS HERE
 
-.then(() => getFamilyDocument(config.documents.Andersen))
-.then(() => getFamilyDocument(config.documents.Wakefield))
-.then(() => queryCollection())
-.then(() => replaceFamilyDocument(config.documents.Andersen))
-.then(() => queryCollection())
-.then(() => deleteFamilyDocument(config.documents.Andersen))
+.then(() => getEventDocument(config.documents.f301568))
+.then(() => getEventDocument(config.documents.f300607))
+.then(() => queryCollection('SELECT VALUE r.title FROM root r WHERE r.id = "f301568"'))
+// .then(() => replaceFamilyDocument(config.documents.Andersen))
+.then(() => queryCollection('SELECT VALUE r.title FROM root r WHERE r.id = "f301568"'))
+// .then(() => deleteFamilyDocument(config.documents.Andersen))
 .then(() => cleanup())
 .then(() => { exit(`Completed successfully`); })
 .catch((error) => { exit(`Completed with error ${JSON.stringify(error)}`) });
