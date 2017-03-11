@@ -8,32 +8,22 @@ var uwclient = new uwaterlooApi({
 
 
 module.exports = {
-    searchEventsByType: function(query,callback){
-        uwclient.get('/events', function(err, res) {
-            var obj = [];
-           for(var i = 0; i < res.data.length; i++){
-                var curr = res.data[i];
-                if(curr.type.includes(query)){
-                    obj.push(curr);
-                }
-           }
-           callback(JSON.stringify(obj));
-        })
-    },
-    searchEventsByDate: function(query,callback){
+    searchEvents: function(start,end,type,callback){
         uwclient.get('/events', function(err, res) {
             var obj = [];
            for(var i = 0; i < res.data.length; i++){
                 var curr = res.data[i];
                 var startDate = new Date(curr.times[0].start);
                 var endDate = new Date(curr.times[0].end);
-                var d = new Date();
-                console.log(curr.times[0].start);
-                if(d > startDate){
+
+                // TODO: use user's start and end dates
+                var startString = new Date(start);
+                var endString= new Date(end);
+                if((!start & !end || startString <= startDate && endString >= endDate) && (!type || curr.type.includes(type))){
                    obj.push(curr);
                 }
            }
-           callback(JSON.stringify(obj));
+           callback(obj);
         })
     }
     
