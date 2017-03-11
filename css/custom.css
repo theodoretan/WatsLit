@@ -11,9 +11,10 @@ body {
 	background-image: url("../images/background.png");
 	background-size: cover;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+    height: 100%;
 }
 header {
 	height: 120px;
@@ -77,6 +78,9 @@ h2 {
 	justify-content: center;
 }
 @media (max-width: 900px) {
+    body {
+        height: auto;
+    }
 	.main {
 		width: 100%;
 	}
