@@ -1,53 +1,22 @@
-/*-----------------------------------------------------------------------------
-This template demonstrates how to use an IntentDialog with a LuisRecognizer to add 
-natural language support to a bot. 
-For a complete walkthrough of creating this type of bot see the article at
-http://docs.botframework.com/builder/node/guides/understanding-natural-language/
------------------------------------------------------------------------------*/
-"use strict";
-var builder = require("botbuilder");
-var botbuilder_azure = require("botbuilder-azure");
+var builder = require('botbuilder');
 var restify = require('restify');
 var search = require('./search.js');
 var specialChars = require('underscore');
 
-var useEmulator = (process.env.NODE_ENV == 'development');
 
-var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure.BotServiceConnector({
-    appId: process.env['MicrosoftAppId'],
-    appPassword: process.env['MicrosoftAppPassword'],
-    stateEndpoint: process.env['BotStateEndpoint'],
-    openIdMetadata: process.env['BotOpenIdMetadata']
-});
-
+var connector = new builder.ChatConnector();
 var bot = new builder.UniversalBot(connector);
-
 var types = ['Information session', 'Workshop', 'Lecture', 'Conference', 'Seminar', 'Open house', 'Reception', 'Performance', 'Thesis defence', 'Reunion', 'Meeting']
 
+// LUIS connection
+var recognizer = new builder.LuisRecognizer("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/deecd678-4dca-4736-bc93-f3982e1ae346?subscription-key=8a9b1636e26d4a7a8788c900a0aa98e6&verbose=true");
+bot.recognizer(recognizer);
 
-// Make sure you add code to validate these fields
-var luisAppId = process.env.LuisAppId;
-var luisAPIKey = process.env.LuisAPIKey;
-var luisAPIHostName = process.env.LuisAPIHostName || 'api.projectoxford.ai';
-
-// const LuisModelUrl = 'https://' + luisAPIHostName + '/luis/v1/application?id=' + luisAppId + '&subscription-key=' + luisAPIKey;
-const url = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/deecd678-4dca-4736-bc93-f3982e1ae346?subscription-key=8a9b1636e26d4a7a8788c900a0aa98e6&verbose=true";
-// Main dialog with LUIS
-var recognizer = new builder.LuisRecognizer(url);
-var dialog = new builder.IntentDialog({ recognizers: [recognizer] })
-/*
-.matches('<yourIntent>')... See details at http://docs.botframework.com/builder/node/guides/understanding-natural-language/
-*/
-.matches('None', (session, args) => {
-    session.send('Hi! This is the None intent handler. You said: \'%s\'.', session.message.text);
-})
-.onDefault((session) => {
-    session.send('Sorry, I did not understand \'%s\'.', session.message.text);
-});
-
-bot.dialog('/', dialog);    
+var dialog =  new builder.IntentDialog({recognizers:[recognizer]});
 
 
+
+bot.dialog('/',dialog);
 dialog.matches('Greeting', [
     // Search input  
     function (session,result, args) {
@@ -142,16 +111,9 @@ dialog.matches('Help',[
     }
 ]);
 
-
-
-if (useEmulator) {
-    var restify = require('restify');
-    var server = restify.createServer();
-    server.listen(3978, function() {
-        console.log('test bot endpont at http://localhost:3978/api/messages');
-    });
-    server.post('/api/messages', connector.listen());    
-} else {
-    module.exports = { default: connector.listen() }
-}
+var server = restify.createServer();
+server.listen(process.env.port || process.env.PORT || 3978, function () {
+   console.log('%s listening to %s', server.name, server.url); 
+});
+server.post('/api/messages', connector.listen());
 
