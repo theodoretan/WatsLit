@@ -74,7 +74,7 @@ dialog.matches('Event Search',[
  
              var cards = []; //getCardsAttachments();
             for(var i=0; i<10; ++i){
-              var datetime = Date.parse(response[i].times[0].start);
+              var datetime =new Date( Date.parse(response[i].times[0].start));
                 console.log(response[i]);
                 cards.push(
                     new builder.HeroCard(session)
