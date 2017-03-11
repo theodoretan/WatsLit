@@ -44,3 +44,34 @@ getDatabase()
 .then(() => { exit(`Completed successfully`); })
 .catch((error) => { exit(`Completed with error ${JSON.stringify(error)}`) });
 
+
+function getCollection() {
+    console.log(`Getting collection:\n${config.collection.id}\n`);
+
+    return new Promise((resolve, reject) => {
+        client.readCollection(collectionUrl, (err, result) => {
+            if (err) {
+                if (err.code == HttpStatusCodes.NOTFOUND) {
+                    client.createCollection(databaseUrl, config.collection, { offerThroughput: 400 }, (err, created) => {
+                        if (err) reject(err)
+                        else resolve(created);
+                    });
+                } else {
+                    reject(err);
+                }
+            } else {
+                resolve(result);
+            }
+        });
+    });
+}
+
+getDatabase()
+
+// ADD THIS PART TO YOUR CODE
+.then(() => getCollection())
+// ENDS HERE
+
+.then(() => { exit(`Completed successfully`); })
+.catch((error) => { exit(`Completed with error ${JSON.stringify(error)}`) });
+
