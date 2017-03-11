@@ -38,7 +38,7 @@ dialog.matches('Greeting', [
             .subtitle("This program starts at: " + response[i].times[0].start)
             .text('This event is run by: ' + response[i].site_name)
             .images([
-                builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/storage/media/storage-introduction/storage-concepts.png')
+                builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
             ])
             .buttons([
                 builder.CardAction.openUrl(session, response[i].link , 'Learn More')
