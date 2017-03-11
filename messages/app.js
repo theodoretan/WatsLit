@@ -114,10 +114,10 @@ function queryCollection(query) {
     });
 };
 
-function replaceFamilyDocument(document) {
+function replaceEventDocument(document) {
     let documentUrl = `${collectionUrl}/docs/${document.id}`;
     console.log(`Replacing document:\n${document.id}\n`);
-    document.children[0].grade = 6;
+    // document.children[0].grade = 6;
 
     return new Promise((resolve, reject) => {
         client.replaceDocument(documentUrl, document, (err, result) => {
@@ -129,7 +129,7 @@ function replaceFamilyDocument(document) {
     });
 };
 
-function deleteFamilyDocument(document) {
+function deleteEventDocument(document) {
     let documentUrl = `${collectionUrl}/docs/${document.id}`;
     console.log(`Deleting document:\n${document.id}\n`);
 
