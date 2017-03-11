@@ -90,6 +90,69 @@ function getFamilyDocument(document) {
     });
 };
 
+
+
+function queryCollection() {
+    console.log(`Querying collection through index:\n${config.collection.id}`);
+
+    return new Promise((resolve, reject) => {
+        client.queryDocuments(
+            collectionUrl,
+            'SELECT VALUE r.children FROM root r WHERE r.lastName = "Andersen"'
+        ).toArray((err, results) => {
+            if (err) reject(err)
+            else {
+                for (var queryResult of results) {
+                    let resultString = JSON.stringify(queryResult);
+                    console.log(`\tQuery returned ${resultString}`);
+                }
+                console.log();
+                resolve(results);
+            }
+        });
+    });
+};
+
+function replaceFamilyDocument(document) {
+    let documentUrl = `${collectionUrl}/docs/${document.id}`;
+    console.log(`Replacing document:\n${document.id}\n`);
+    document.children[0].grade = 6;
+
+    return new Promise((resolve, reject) => {
+        client.replaceDocument(documentUrl, document, (err, result) => {
+            if (err) reject(err);
+            else {
+                resolve(result);
+            }
+        });
+    });
+};
+
+function deleteFamilyDocument(document) {
+    let documentUrl = `${collectionUrl}/docs/${document.id}`;
+    console.log(`Deleting document:\n${document.id}\n`);
+
+    return new Promise((resolve, reject) => {
+        client.deleteDocument(documentUrl, (err, result) => {
+            if (err) reject(err);
+            else {
+                resolve(result);
+            }
+        });
+    });
+};
+
+function cleanup() {
+    console.log(`Cleaning up by deleting database ${config.database.id}`);
+
+    return new Promise((resolve, reject) => {
+        client.deleteDatabase(databaseUrl, (err) => {
+            if (err) reject(err)
+            else resolve(null);
+        });
+    });
+}
+
 getDatabase()
 
 // ADD THIS PART TO YOUR CODE
@@ -98,9 +161,12 @@ getDatabase()
 
 .then(() => getFamilyDocument(config.documents.Andersen))
 .then(() => getFamilyDocument(config.documents.Wakefield))
-// ENDS HERE
-
-
+.then(() => queryCollection())
+.then(() => replaceFamilyDocument(config.documents.Andersen))
+.then(() => queryCollection())
+.then(() => deleteFamilyDocument(config.documents.Andersen))
+.then(() => cleanup())
 .then(() => { exit(`Completed successfully`); })
 .catch((error) => { exit(`Completed with error ${JSON.stringify(error)}`) });
+// ENDS HERE
 
