@@ -21,6 +21,8 @@ exports.initDatabase = function() {
 
 // use: db.updateDatabase();
 exports.updateDatabase = function() {
+    // let query = `SELECT * `
+
     dbUtil.getDatabase()
     .then(() => dbUtil.getCollection())
     
@@ -31,7 +33,9 @@ exports.updateDatabase = function() {
 
 // use: db.trendingEvents(callback, num);
 exports.trendingEvents = function (callback, num=50) {
-    let query = `SELECT TOP ${num} * FROM root r ORDER BY r.likes DESC`;
+    // let time = new Date().toISOString().substr(0, 10);
+    
+    let query = `SELECT TOP ${num} * FROM root r ORDER BY r.likes DESC `;
 
     dbUtil.getDatabase()
     .then(() => dbUtil.getCollection())
