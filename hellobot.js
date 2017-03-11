@@ -55,12 +55,12 @@ bot.dialog('/', [
                     new builder.HeroCard(session)
             .title(response[i].title)
             .subtitle("This program starts at: " + response[i].times[0].start)
-            .text(response[i].link + ' is the link for more information.')
+            .text('This event is run by: ' + response[i].site_name)
             .images([
                 builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/storage/media/storage-introduction/storage-concepts.png')
             ])
             .buttons([
-                builder.CardAction.openUrl(session, response[i].link, 'Learn More')
+                builder.CardAction.openUrl(session, response[i].link , 'Learn More')
             ])
 
 
