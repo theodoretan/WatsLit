@@ -2,6 +2,7 @@
 
 
 var dbUtil = require('./dbUtil');
+var waterlooAPI = require('./waterlooApi');
 
 var exports = {};
 
@@ -9,7 +10,11 @@ var exports = {};
 exports.initDatabase = function() {
     dbUtil.getDatabase()
     .then(() => dbUtil.getCollection())
-
+    .then(() => waterlooAPI.getFedEvents())
+    .then((res) => { res.forEach((obj) => { dbUtil.getEventDocument(obj) }) })
+    .then(() => waterlooAPI.getClubEvents())
+    .then((res) => { res.forEach((obj) => { dbUtil.getEventDocument(obj) }) })
+    // .then((res) => { console.log( res )})
     .then(() => { dbUtil.exit(`Completed successfully`) })
     .catch((e) => { dbUtil.exit(`Completed with error ${JSON.stringify(e)}`) });
 };

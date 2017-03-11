@@ -6,7 +6,8 @@
   "dependencies": {
     "botbuilder": "^3.4.2",
     "botbuilder-azure": "0.0.1",
-    "documentdb": "^1.10.2"
+    "documentdb": "^1.10.2",
+    "uwaterloo-api": "^1.0.2"
   },
   "devDependencies": {
     "restify": "^4.1.1"
