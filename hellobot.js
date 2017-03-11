@@ -14,6 +14,8 @@ bot.recognizer(recognizer);
 
 var dialog =  new builder.IntentDialog({recognizers:[recognizer]});
 
+
+
 bot.dialog('/',dialog);
 dialog.matches('Greeting', [
     // Search input  
@@ -30,6 +32,7 @@ dialog.matches('Greeting', [
             for(var i=0; i<10; ++i){
                 console.log(response[i]);
                 cards.push(
+<<<<<<< HEAD
                             new builder.HeroCard(session)
                     .title(specialChars.unescape(response[i].title))
                     .subtitle("This program starts at: " + response[i].times[0].start)
@@ -40,6 +43,20 @@ dialog.matches('Greeting', [
                     .buttons([
                         builder.CardAction.openUrl(session, response[i].link , 'Learn More')
                     ])
+=======
+                    new builder.HeroCard(session)
+            .title(specialChars.unescape(response[i].title).replace("&#039;", "'"))
+            .subtitle("This program starts at: " + response[i].times[0].start)
+            .text('This event is run by: ' + response[i].site_name)
+            .images([
+                builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
+            ])
+            .buttons([
+                builder.CardAction.openUrl(session, response[i].link , 'Learn More')
+            ])
+
+>>>>>>> 6c3ecdc87064910f80eda7e34b686c7af38c6920
+
 
                 );
             }
@@ -72,7 +89,7 @@ dialog.matches('Event Search',[
                 console.log(response[i]);
                 cards.push(
                     new builder.HeroCard(session)
-            .title(response[i].title)
+            .title(specialChars.unescape(response[i].title).replace("&#039;", "'"))
             .subtitle("This program starts at: " + response[i].times[0].start)
             .text('This event is run by: ' + response[i].site_name)
             .images([
