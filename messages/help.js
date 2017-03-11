@@ -8,7 +8,6 @@ module.exports = {
     
     var textResponse = "###How to use WatsLit\n\n" + commands[0] + "\n" + ">" + commands[1] + "\n\n" + "The list of categories you can use with search are:" + "\n\n";
 
-    helpReply.text();
     for (var i = 0; i < events.length; i++){
         textResponse += events[i] + "\n\n";
     }
