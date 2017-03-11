@@ -30,18 +30,20 @@ dialog.matches('Greeting', [
             // display the cards
             var cards = []; 
             for(var i=0; i<10; ++i){
+                var datetime =new Date( Date.parse(response[i].times[0].start));
                 console.log(response[i]);
                 cards.push(
 
                             new builder.HeroCard(session)
                     .title(specialChars.unescape(response[i].title).replace("&#039;","'"))
-                    .subtitle("This program starts at: " + response[i].times[0].start)
+                    .subtitle("This program starts at: " + datetime)
                     .text('This event is run by: ' + response[i].site_name)
                     .images([
                         builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
                     ])
                     .buttons([
-                        builder.CardAction.openUrl(session, response[i].link , 'Learn More')
+                        builder.CardAction.openUrl(session, response[i].link , 'Learn More'),
+                        builder.CardAction.imBack(session, response[i].id, "🔥")
                     ])
                 );
             }
@@ -85,9 +87,11 @@ dialog.matches('Event Search',[
                 builder.CardImage.create(session, 'https://raw.githubusercontent.com/PragashSiva/bart/master/Null-Photo-Image.jpg')
             ])
             .buttons([
-                builder.CardAction.openUrl(session, response[i].link , 'Learn More')
+                builder.CardAction.openUrl(session, response[i].link , 'Learn More'),
+                builder.CardAction.imBack(session, response[i].id, "🔥") 
             ])
 
+            // .tap(new builder.CardAction.imBack(session, response[i].id, response[i].title))
 
                 );
             }
