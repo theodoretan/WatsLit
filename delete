@@ -1,0 +1,29 @@
+var querystring = require('querystring');
+var https = require('https');
+//Instantiate the client 
+var uwaterlooApi = require('uwaterloo-api'); 
+var uwclient = new uwaterlooApi({
+  API_KEY : 'e4ddfdb1f26c7f9bc1a6b2084fcddee2'
+});
+
+
+module.exports = {
+    searchEventsByType: function(query,callback){
+        uwclient.get('/events', function(err, res) {
+           for(var i = 0; i < res.data.length; i++){
+                var obj = [];
+                var curr = res.data[i];
+                if(curr.type.includes(query)){
+                    obj.push(curr);
+                    console.log(curr);
+                }
+           }
+           callback(obj);
+        })
+    },
+    searchEventsByDate: function(query,callback){
+        
+    }
+    
+}
+
