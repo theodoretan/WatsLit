@@ -14,6 +14,8 @@ bot.recognizer(recognizer);
 
 var dialog =  new builder.IntentDialog({recognizers:[recognizer]});
 
+
+
 bot.dialog('/',dialog);
 dialog.matches('Greeting', [
     // Search input  
@@ -31,7 +33,7 @@ dialog.matches('Greeting', [
                 console.log(response[i]);
                 cards.push(
                     new builder.HeroCard(session)
-            .title(specialChars.unescape(response[i].title))
+            .title(specialChars.unescape(response[i].title).replace("&#039;", "'"))
             .subtitle("This program starts at: " + response[i].times[0].start)
             .text('This event is run by: ' + response[i].site_name)
             .images([
@@ -40,6 +42,7 @@ dialog.matches('Greeting', [
             .buttons([
                 builder.CardAction.openUrl(session, response[i].link , 'Learn More')
             ])
+
 
 
                 );
@@ -87,7 +90,7 @@ dialog.matches('Event Search',[
                 console.log(response[i]);
                 cards.push(
                     new builder.HeroCard(session)
-            .title(response[i].title)
+            .title(specialChars.unescape(response[i].title).replace("&#039;", "'"))
             .subtitle("This program starts at: " + response[i].times[0].start)
             .text('This event is run by: ' + response[i].site_name)
             .images([
