@@ -5,37 +5,15 @@ var search = require('./search.js');
 var connector = new builder.ChatConnector();
 var bot = new builder.UniversalBot(connector);
 
-function getCardsAttachments(session) {
-    return [
-        new builder.HeroCard(session)
-            .title('Azure Storage')
-            .subtitle('Offload the heavy lifting of data center management')
-            .text('Store and help protect your data. Get durable, highly available data storage across the globe and pay only for what you use.')
-            .images([
-                builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/storage/media/storage-introduction/storage-concepts.png')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/storage/', 'Learn More')
-            ]),
+// LUIS connection
+var recognizer = new builder.LuisRecognizer("https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/deecd678-4dca-4736-bc93-f3982e1ae346?subscription-key=8a9b1636e26d4a7a8788c900a0aa98e6&verbose=true");
+bot.recognizer(recognizer);
 
-        new builder.ThumbnailCard(session)
-            .title('DocumentDB')
-            .subtitle('Blazing fast, planet-scale NoSQL')
-            .text('NoSQL service for highly available, globally distributed apps—take full advantage of SQL and JavaScript over document and key-value data without the hassles of on-premises or virtual machine-based cloud database options.')
-            .images([
-                builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/documentdb/media/documentdb-introduction/json-database-resources1.png')
-            ])
-            .buttons([
-                builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/documentdb/', 'Learn More')
-            ])
-            
-            ];
-    }
+var dialog =  new builder.IntentDialog({recognizers:[recognizer]});
 
-
-var dialog = new builder.IntentDialog();
-bot.dialog('/', [
-
+bot.dialog('/',dialog);
+dialog.matches('Greeting', [
+    // Search input
     function (session, args, next) {
         if (session.message.text.toLowerCase() == 'search') {
             builder.Prompts.text(session, 'Who are you looking for?');
@@ -43,7 +21,10 @@ bot.dialog('/', [
             var query = session.message.text.substring(7);
             next({ response: query });
         }
-    } , function (session, result, next) {
+    },
+
+    // Create the carousel
+    function (session, result, next) {
         var query = result.response;
         search.searchEvents("2017-03-24T09:45:00-04:00", "2017-03-26T09:45:00-04:00", query, function (response) {
             session.dialogData.property = null;
@@ -67,54 +48,15 @@ bot.dialog('/', [
                 );
             }
 
-          //   function getCardsAttachments(session) {
-    // return [
-    //     new builder.HeroCard(session)
-    //         .title('Azure Storage')
-    //         .subtitle('Offload the heavy lifting of data center management')
-    //         .text('Store and help protect your data. Get durable, highly available data storage across the globe and pay only for what you use.')
-    //         .images([
-    //             builder.CardImage.create(session, 'https://docs.microsoft.com/en-us/azure/storage/media/storage-introduction/storage-concepts.png')
-    //         ])
-    //         .buttons([
-    //             builder.CardAction.openUrl(session, 'https://azure.microsoft.com/en-us/services/storage/', 'Learn More')
-    //         ]) ]
-           
+            // create reply with Carousel AttachmentLayout
+            var reply = new builder.Message(session)
+                .attachmentLayout(builder.AttachmentLayout.carousel)
+                .attachments(cards);
 
-    // create reply with Carousel AttachmentLayout
-    var reply = new builder.Message(session)
-        .attachmentLayout(builder.AttachmentLayout.carousel)
-        .attachments(cards);
-
-    session.send(reply);
+            session.send(reply);
 
         })
     }
-    
-    // , function (session, result, next) {  
-
-    //     var username = result.response.entity;
-    //     githubClient.loadProfile(username, function (profile) {
-    //         var card = new builder.ThumbnailCard(session);
-
-    //         card.title(profile.login);
-
-    //         card.images([builder.CardImage.create(session, profile.avatar_url)]);
-
-    //         if (profile.name) card.subtitle(profile.name);
-
-    //         var text = '';
-    //         if (profile.company) text += profile.company + ' \n';
-    //         if (profile.email) text += profile.email + ' \n';
-    //         if (profile.bio) text += profile.bio;
-    //         card.text(text);
-
-    //         card.tap(new builder.CardAction.openUrl(session, profile.html_url));
-            
-    //         var message = new builder.Message(session).attachments([card]);
-    //         session.send(message);
-    //     });
-    // }
 ]);
 
 var server = restify.createServer();
